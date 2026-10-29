@@ -1,0 +1,6 @@
+.teste/
+dist/
+node_modules/
+painel/data/
+.DS_Store
+*.log
