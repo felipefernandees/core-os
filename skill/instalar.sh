@@ -126,9 +126,9 @@ mkdir -p "$BASE/stack"
 cp -a "$AQUI/stack/." "$BASE/stack/"
 ln -sf "$ENV_FILE" "$BASE/stack/.env"
 (cd "$BASE/stack" && docker compose pull -q && docker compose up -d) >/dev/null
-for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:8080 && break; sleep 2; done
+for i in $(seq 1 60); do curl -fs -o /dev/null http://127.0.0.1:8080 && break; sleep 2; done
 curl -fsS -o /dev/null http://127.0.0.1:8080 || falha "Evolution API não respondeu. Veja: docker compose -f $BASE/stack/docker-compose.yml logs evolution"
-for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:5679/healthz && break; sleep 2; done
+for i in $(seq 1 60); do curl -fs -o /dev/null http://127.0.0.1:5679/healthz && break; sleep 2; done
 ok "containers no ar"
 # fluxo do WhatsApp no n8n (importa uma vez e ativa)
 # importa sempre: reinstalar também atualiza o fluxo
@@ -140,7 +140,7 @@ python3 "$BASE/stack/ativar-fluxo.py" "$N8N_DB" coreOsWhatsapp01 >/dev/null || f
 docker compose -f "$BASE/stack/docker-compose.yml" exec -T n8n n8n update:workflow --id=coreOsWhatsapp01 --active=true >/tmp/core-os-n8n.log 2>&1 \
   || falha "Não consegui ativar o fluxo no n8n. Veja: /tmp/core-os-n8n.log"
 docker compose -f "$BASE/stack/docker-compose.yml" restart n8n >/dev/null
-for i in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:5679/healthz && break; sleep 2; done
+for i in $(seq 1 60); do curl -fs -o /dev/null http://127.0.0.1:5679/healthz && break; sleep 2; done
 ok "fluxo WhatsApp → Claude Code importado e ativo"
 # instância do WhatsApp com webhook pro n8n
 EVO_KEY=$(pega EVO_KEY)
@@ -180,7 +180,7 @@ UNIT
 systemctl daemon-reload
 systemctl enable core-os-painel >/dev/null 2>&1
 systemctl restart core-os-painel
-for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:3000/api/eu && break; sleep 1; done
+for i in $(seq 1 20); do curl -fs -o /dev/null http://127.0.0.1:3000/api/eu && break; sleep 1; done
 curl -fsS -o /dev/null http://127.0.0.1:3000/api/eu || falha "Painel não subiu. Veja: journalctl -u core-os-painel -n 50"
 ok "serviço core-os-painel ativo (volta sozinho se o servidor reiniciar)"
 
