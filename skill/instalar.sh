@@ -150,7 +150,7 @@ if ! evo http://127.0.0.1:8080/instance/fetchInstances | jq -e '.[] | select(.na
 fi
 evo -X POST http://127.0.0.1:8080/webhook/set/cerebro -d '{"webhook":{"enabled":true,"url":"http://n8n:5678/webhook/core-os-whatsapp","byEvents":false,"base64":false,"events":["MESSAGES_UPSERT"]}}' >/dev/null
 evo -X POST http://127.0.0.1:8080/settings/set/cerebro -d '{"rejectCall":false,"msgCall":"","groupsIgnore":true,"alwaysOnline":false,"readMessages":false,"readStatus":false,"syncFullHistory":false}' >/dev/null
-ok "instância \"cerebro\" criada, webhook apontando pro n8n"
+ok "instância \"cerebro\" pronta, webhook apontando pro n8n"
 
 passo "7/8 · Painel"
 rm -rf "$BASE/painel.novo"; cp -a "$PAINEL_SRC" "$BASE/painel.novo"
